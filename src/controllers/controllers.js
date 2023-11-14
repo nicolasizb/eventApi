@@ -37,7 +37,8 @@ async function signUp(req, res) {
                 email: email, 
                 password: password, 
                 dni: dni, 
-            })                 
+            })
+                  
             user.password = await UserModel.encryptPassword(password)
             const newUser = user.save()
         
@@ -47,7 +48,7 @@ async function signUp(req, res) {
                 status: "Customer created"
             })    
         } else {
-            res.status(400).json("User already exists")   
+            res.status(400).json("User exists!")   
         }
     } catch {
         console.log(error)  
