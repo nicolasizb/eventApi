@@ -1,5 +1,21 @@
 const UserModel = require('../models/User.model.js')
 
+async function getUser(req, res) {
+    const id = req.params.id 
+
+    try {
+        const userFound = UserModel.findOne({ _id: id })
+
+        if(userFound) {
+            res.status(200).json(userFound)
+        } else {
+            res.status(404).json("Not found user")
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function logIn(req, res) {
     const { email, password } = req.body;
     
@@ -10,7 +26,8 @@ async function logIn(req, res) {
             const isValidPassword = await UserModel.comparePassword(password, userFound.password)
             if(isValidPassword) {                
                 res.status(200).json({
-                    status: true
+                    status: true,
+                    id: userFound._id
                 })
             } else {
                 res.status(400).json('EMAIL OR PASSWORD INCORRECT')
@@ -72,6 +89,7 @@ async function changeStatusLog(req, res) {
 }
 
 module.exports = {
+    getUser,
     logIn,
     signOn,
     changeStatusLog
