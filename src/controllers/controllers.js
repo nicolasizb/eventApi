@@ -24,7 +24,7 @@ async function logIn(req, res) {
     }
 }
 
-async function signUp(req, res) {
+async function signOn(req, res) {
     try {
         const { first_name, last_name, email, password, dni } = req.body
 
@@ -43,7 +43,7 @@ async function signUp(req, res) {
             const newUser = user.save()
         
             res.status(200).json({
-                _id: newUser._id,
+                _id: newUser._id,   
                 email: newUser.email,
                 status: "Customer created"
             })    
@@ -58,5 +58,5 @@ async function signUp(req, res) {
 
 module.exports = {
     logIn,
-    signUp
+    signOn
 }
