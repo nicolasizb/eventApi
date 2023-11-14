@@ -47,9 +47,7 @@ async function signUp(req, res) {
                 status: "Customer created"
             })    
         } else {
-            res.status(400).json({
-                status: "User exists"
-            })   
+            res.status(400).json("User already exists")   
         }
     } catch {
         console.log(error)  
