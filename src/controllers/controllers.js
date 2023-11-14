@@ -24,18 +24,17 @@ async function logIn(req, res) {
 
 async function signUp(req, res) {
     try {
-        const { name, email, password, address, dni, loginStatus } = req.body
+        const { first_name, last_name, email, password, dni } = req.body
 
         const userFound = await UserModel.findOne({ email: email })
 
         if(!userFound) {
             const user = new UserModel({
-                name: name, 
+                first_name: first_name,
+                last_name: last_name, 
                 email: email, 
                 password: password, 
-                address: address, 
                 dni: dni, 
-                loginStatus: loginStatus
             })
                   
             user.password = await UserModel.encryptPassword(password)
