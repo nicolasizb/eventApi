@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     res.status(200).json('Welcome to this API')
 })
 
-router.get('/sign-in', logIn)
+router.post('/sign-in', logIn)
 
 router.post('/sign-up', signUp)
 
