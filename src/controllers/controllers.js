@@ -9,7 +9,7 @@ async function logIn(req, res) {
         if(userFound) {
             const isValidPassword = await UserModel.comparePassword(password, userFound.password)
             if(isValidPassword) {                
-                res.status(200).json('LOG INNNN')
+                res.status(200).json('LOG IN')
             } else {
                 res.status(400).json('EMAIL OR PASSWORD INCORRECT')
             }
