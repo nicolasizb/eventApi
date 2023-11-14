@@ -37,8 +37,7 @@ async function signUp(req, res) {
                 email: email, 
                 password: password, 
                 dni: dni, 
-            })
-                  
+            })                 
             user.password = await UserModel.encryptPassword(password)
             const newUser = user.save()
         
