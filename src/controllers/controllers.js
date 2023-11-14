@@ -77,17 +77,15 @@ async function signOn(req, res) {
 async function changeStatusLog(req, res) {
     const { id, status } = req.body
 
-    console.log(id, status)
+    const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
 
-    // const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
-
-    // if(!userUpdate) {
-    //     console.log('ERR')
-    // } else {
-    //     res.status(200).json( {
-    //         "NEW USER": userUpdate
-    //     })
-    // }
+    if(!userUpdate) {
+        console.log('ERR')
+    } else {
+        res.status(200).json( {
+            "NEW USER": userUpdate
+        })
+    }
 }
 
 module.exports = {
