@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: true,
         unique: true
+    },
+    login_status: {
+        type: Boolean,
+        required: true,
     }
 })
 

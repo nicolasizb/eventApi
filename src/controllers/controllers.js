@@ -26,7 +26,7 @@ async function logIn(req, res) {
 
 async function signOn(req, res) {
     try {
-        const { first_name, last_name, email, password, dni } = req.body
+        const { first_name, last_name, email, password, dni, login_status } = req.body
 
         const userFound = await UserModel.findOne({ email: email })
 
@@ -37,6 +37,7 @@ async function signOn(req, res) {
                 email: email, 
                 password: password, 
                 dni: dni, 
+                login_status: login_status
             })
                   
             user.password = await UserModel.encryptPassword(password)
@@ -56,7 +57,22 @@ async function signOn(req, res) {
     }
 } 
 
+async function changeStatusLog(req, res) {
+    const { id, status } = req.body
+
+    const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
+
+    if(!userUpdate) {
+        console.log('ERR')
+    } else {
+        res.status(200).json( {
+            "NEW USER": userUpdate
+        })
+    }
+}
+
 module.exports = {
     logIn,
-    signOn
+    signOn,
+    changeStatusLog
 }
