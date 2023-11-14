@@ -16,7 +16,7 @@ async function logIn(req, res) {
         } else {
             res.status(400).json('EMAIL OR PASSWORD INCORRECT')
         }
-    } catch {
+    } catch (error) {
         console.log(error)  
         res.status(400).json({ error: 'Error' })
     }
