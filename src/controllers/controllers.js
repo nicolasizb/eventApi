@@ -75,18 +75,19 @@ async function signOn(req, res) {
 } 
 
 async function changeStatusLog(req, res) {
-    res.header('Access-Control-Allow-Origin', '*')
     const { id, status } = req.body
 
-    const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
+    console.log(id, status)
 
-    if(!userUpdate) {
-        console.log('ERR')
-    } else {
-        res.status(200).json( {
-            "NEW USER": userUpdate
-        })
-    }
+    // const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
+
+    // if(!userUpdate) {
+    //     console.log('ERR')
+    // } else {
+    //     res.status(200).json( {
+    //         "NEW USER": userUpdate
+    //     })
+    // }
 }
 
 module.exports = {
