@@ -75,7 +75,7 @@ async function signOn(req, res) {
 } 
 
 async function changeStatusLog(req, res) {
-    res.hedaer('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Origin', '*')
     const { id, status } = req.body
 
     const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
