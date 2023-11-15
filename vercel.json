@@ -18,6 +18,9 @@
         {
             "src": "/log/(.*)",
             "methods": ["POST"],
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            },
             "dest": "/index.js"
         },
         {
