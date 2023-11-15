@@ -1,3 +1,7 @@
+const { initializeApp } = require('firebase/app')
+const firebaseConfig = require('../config/firebase.config.js')
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage')
+
 const UserModel = require('../models/User.model.js')
 
 async function logIn(req, res) {
@@ -88,9 +92,51 @@ async function getUser(req, res) {
     }
 }
 
+async function uploadFile(req, res) {
+    // Connection with firebase
+    const firebaseCon = initializeApp(firebaseConfig)
+    const storage =  getStorage(firebaseCon)
+
+    try {
+        const dateTime = giveCurrectDateTime()
+
+        // Create file name before uploading (Where, reference)
+        const storageRef = ref(storage, `profile_photo/${req.file.originalname + ' ' + dateTime}`)
+
+        const metadata = {
+            contentType: req.file.mimetype 
+        }
+
+        const uploadFile = await uploadBytesResumable(storageRef, req.file.buffer, metadata)
+
+        const downloadURL = await getDownloadURL(uploadFile.ref)
+
+        res.status(200).json({
+            downloadURL
+        })
+    } catch(error) {
+        res.status(400).send(error.message)
+    }
+}
+
+function giveCurrectDateTime() {
+    const today =  new Date()
+    const date = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDay()
+    const time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()
+    const dateTime = date + ' ' + time
+    return dateTime
+}
+
+// async function getEvents(req, res) {
+//     const {  }
+// }
+
+// createEvent
+
 module.exports = {
     logIn,
     signOn,
     changeStatusLog,
-    getUser
+    getUser,
+    uploadFile
 }
