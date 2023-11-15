@@ -4,6 +4,10 @@ const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('fireb
 
 const UserModel = require('../models/User.model.js')
 
+// Connection with firebase
+const firebaseCon = initializeApp(firebaseConfig)
+const storage =  getStorage(firebaseCon)
+
 async function logIn(req, res) {
     const { email, password } = req.body;
     
@@ -31,12 +35,27 @@ async function logIn(req, res) {
 
 async function signOn(req, res) {
     try {
-        const { first_name, last_name, email, password, dni, login_status } = req.body
+        const { profile_photo, first_name, last_name, email, password, dni, login_status } = req.body
 
         const userFound = await UserModel.findOne({ email: email })
 
         if(!userFound) {
+            const dateTime = giveCurrectDateTime()
+
+            // Create file name before uploading (Where, reference)
+            const storageRef = ref(storage, `profile_photo/${req.file.originalname + ' ' + dateTime}`)
+            const metadata = {
+                contentType: req.file.mimetype 
+            }
+            const uploadFile = await uploadBytesResumable(storageRef, req.file.buffer, metadata)
+            profile_photo = await getDownloadURL(uploadFile.ref)
+          
+            res.status(200).json({
+                downloadURL
+            })
+
             const user = new UserModel({
+                profile_photo: profile_photo,
                 first_name: first_name,
                 last_name: last_name, 
                 email: email, 
@@ -93,10 +112,6 @@ async function getUser(req, res) {
 }
 
 async function uploadFile(req, res) {
-    // Connection with firebase
-    const firebaseCon = initializeApp(firebaseConfig)
-    const storage =  getStorage(firebaseCon)
-
     try {
         const dateTime = giveCurrectDateTime()
 
@@ -106,9 +121,7 @@ async function uploadFile(req, res) {
         const metadata = {
             contentType: req.file.mimetype 
         }
-
         const uploadFile = await uploadBytesResumable(storageRef, req.file.buffer, metadata)
-
         const downloadURL = await getDownloadURL(uploadFile.ref)
 
         res.status(200).json({
