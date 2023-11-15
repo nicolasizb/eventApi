@@ -10,6 +10,6 @@ router.get('/', (req, res) => {
 router.post('/sign-in', logIn)
 router.post('/sign-on', signOn)
 router.post('/log', changeStatusLog)
-router.post('/user/:id', getUser)
+router.get('/user/:id', getUser)
 
 module.exports = router

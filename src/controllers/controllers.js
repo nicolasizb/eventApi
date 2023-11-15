@@ -1,21 +1,5 @@
 const UserModel = require('../models/User.model.js')
 
-async function getUser(req, res) {
-    const id = req.params.id 
-
-    try {
-        const userFound = UserModel.findOne({ _id: id })
-
-        if(userFound) {
-            res.status(200).json(userFound)
-        } else {
-            res.status(404).json("Not found user")
-        }
-    } catch (error) {
-        console.error(error)
-    }
-}
-
 async function logIn(req, res) {
     const { email, password } = req.body;
     
@@ -88,9 +72,25 @@ async function changeStatusLog(req, res) {
     }
 }
 
+async function getUser(req, res) {
+    const { id } = req.params
+
+    try {
+        const userFound = await UserModel.findOne({ _id: id })
+
+        if(userFound) {
+            res.status(200).json(userFound)
+        } else {
+            res.status(404).json("Not found user")
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 module.exports = {
-    getUser,
     logIn,
     signOn,
-    changeStatusLog
+    changeStatusLog,
+    getUser
 }
