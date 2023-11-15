@@ -1,5 +1,9 @@
 const UserModel = require('../models/User.model.js')
 
+const ACCEPTED_ORIGINS = [
+    'http://localhost:5173/'
+]
+
 async function getUser(req, res) {
     const id = req.params.id 
 
@@ -75,6 +79,11 @@ async function signOn(req, res) {
 } 
 
 async function changeStatusLog(req, res) {
+    const origin = res.header('origin')
+    if(ACCEPTED_ORIGINS.includes(origin) || !origin) {
+        res.header('Access-Control-Allow-Origin', origin)
+    }
+
     const { id, status } = req.body
 
     const userUpdate = await UserModel.updateOne({ _id: id}, { login_status: status })
