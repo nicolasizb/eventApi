@@ -1,7 +1,7 @@
 const UserModel = require('../models/User.model.js')
 
 const ACCEPTED_ORIGINS = [
-    'http://localhost:5173/'
+    'http://localhost:5173'
 ]
 
 async function getUser(req, res) {

@@ -17,6 +17,7 @@
         },
         {
             "src": "/log/(.*)",
+            "methods": ["POST"],
             "dest": "/index.js"
         },
         {
