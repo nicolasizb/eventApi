@@ -51,7 +51,7 @@ async function signOn(req, res) {
             profile_photo = await getDownloadURL(uploadFile.ref)
           
             res.status(200).json({
-                downloadURL
+                profile_photo
             })
 
             const user = new UserModel({
