@@ -9,19 +9,16 @@
     "routes": [
         {
             "src": "/sign-in/(.*)",
-            "dest": "/index.js"
+            "dest": "./src/controllers/controllers.js"
         },
         {
             "src": "/sign-on/(.*)",
-            "dest": "/index.js"
+            "dest": "./src/controllers/controllers.js"
         },
         {
             "src": "/log/(.*)",
             "methods": ["POST"],
-            "headers": {
-                "Access-Control-Allow-Origin": "*"
-            },
-            "dest": "/index.js"
+            "dest": "./src/controllers/controllers.js"
         },
         {
             "src": "/(.*)",
