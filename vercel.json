@@ -8,24 +8,8 @@
     ],
     "routes": [
         {
-            "src": "/sign-in/(.*)",
-            "dest": "./src/controllers/controllers.js"
-        },
-        {
-            "src": "/sign-on/(.*)",
-            "dest": "./src/controllers/controllers.js"
-        },
-        {
-            "src": "/log/(.*)",
-            "methods": ["POST"],
-            "dest": "./src/controllers/controllers.js",
-            "headers": {
-                "Access-Control-Allow-Origin": "*"
-            }
-        },
-        {
             "src": "/(.*)",
-            "dest": "./index.js"
+            "dest": "/"
         }
     ]
 }
