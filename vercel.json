@@ -18,11 +18,14 @@
         {
             "src": "/log/(.*)",
             "methods": ["POST"],
-            "dest": "./src/controllers/controllers.js"
+            "dest": "./src/controllers/controllers.js",
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            }
         },
         {
             "src": "/(.*)",
-            "dest": "/index.js"
+            "dest": "./index.js"
         }
     ]
 }
