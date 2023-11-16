@@ -3,10 +3,30 @@ const firebaseConfig = require('../config/firebase.config.js')
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage')
 
 const UserModel = require('../models/User.model.js')
+const EventModel = require('../models/Event.model.js')
+
+const { response } = require('express')
+const { default: mongoose } = require('mongoose')
 
 // Connection with firebase
 const firebaseCon = initializeApp(firebaseConfig)
 const storage =  getStorage(firebaseCon)
+
+async function getUser(req, res) {
+    const { id } = req.params
+
+    try {
+        const userFound = await UserModel.findOne({ _id: id })
+
+        if(userFound) {
+            res.status(200).json(userFound)
+        } else {
+            res.status(404).json("Not found user")
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
 
 async function logIn(req, res) {
     const { email, password } = req.body;
@@ -81,16 +101,30 @@ async function changeStatusLog(req, res) {
     }
 }
 
-async function getUser(req, res) {
-    const { id } = req.params
-
+async function addEvent(req, res) {
+    const { picture, title, date, place, city, cost, host } = req.body
+    
     try {
-        const userFound = await UserModel.findOne({ _id: id })
+        const userFound = await UserModel.findOne({ _id: host }) 
 
         if(userFound) {
-            res.status(200).json(userFound)
+            const event = new EventModel({
+                picture: picture,
+                title: title,
+                date: date,
+                place: place,
+                city: city,
+                cost: cost,
+                host: host
+            })
+
+            const newEvent = event.save()
+
+            res.json(200).json({newEvent: newEvent})
         } else {
-            res.status(404).json("Not found user")
+            res.json(404).json({
+                error: "User not found"
+            })
         }
     } catch (error) {
         console.error(error)
@@ -118,6 +152,27 @@ async function uploadProfilePhoto(req, res) {
     }
 }
 
+async function uploadPictureEvent(req, res) {
+    try {
+        const dateTime = giveCurrectDateTime()
+
+        // Create file name before uploading (Where, reference)
+        const storageRef = ref(storage, `picture_event/${req.file.originalname + ' ' + dateTime}`)
+
+        const metadata = {
+            contentType: req.file.mimetype 
+        }
+        const uploadFile = await uploadBytesResumable(storageRef, req.file.buffer, metadata)
+        const downloadURL = await getDownloadURL(uploadFile.ref)
+
+        res.status(200).json({
+            downloadURL
+        })
+    } catch(error) {
+        res.status(400).send(error.message)
+    }
+}
+
 function giveCurrectDateTime() {
     const today =  new Date()
     const date = today.getFullYear() + '-' + today.getMonth() + '-' + today.getDay()
@@ -126,16 +181,12 @@ function giveCurrectDateTime() {
     return dateTime
 }
 
-// async function getEvents(req, res) {
-//     const {  }
-// }
-
-// createEvent
-
 module.exports = {
     logIn,
     signOn,
     changeStatusLog,
     getUser,
-    uploadProfilePhoto
+    addEvent,
+    uploadProfilePhoto,
+    uploadPictureEvent
 }

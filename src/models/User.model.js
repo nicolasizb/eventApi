@@ -43,6 +43,6 @@ UserSchema.statics.comparePassword = async (password, passwordDb) => {
     return await bcrypt.compare(password, passwordDb)
 }
 
-const UserModel = mongoose.model('UserModel', UserSchema);
+const UserModel = mongoose.model('UserModel', UserSchema)
 
-module.exports = UserModel;
+module.exports = UserModel
