@@ -131,6 +131,20 @@ async function addEvent(req, res) {
     }
 }
 
+async function getEvents(req, res) {
+    try {
+        const events = await EventModel.find({})
+
+        if(events) {
+            res.status(200).json(events)
+        } else {
+            res.status(400).json(events)
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function uploadProfilePhoto(req, res) {
     try {
         const dateTime = giveCurrectDateTime()
@@ -187,6 +201,7 @@ module.exports = {
     changeStatusLog,
     getUser,
     addEvent,
+    getEvents,
     uploadProfilePhoto,
     uploadPictureEvent
 }
