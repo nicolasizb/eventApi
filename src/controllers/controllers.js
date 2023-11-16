@@ -35,25 +35,11 @@ async function logIn(req, res) {
 
 async function signOn(req, res) {
     try {
-        const { profile_photo, first_name, last_name, email, password, dni, login_status } = req.body
+        let { profile_photo, first_name, last_name, email, password, dni, login_status } = req.body
 
         const userFound = await UserModel.findOne({ email: email })
 
         if(!userFound) {
-            const dateTime = giveCurrectDateTime()
-
-            // Create file name before uploading (Where, reference)
-            const storageRef = ref(storage, `profile_photo/${req.file.originalname + ' ' + dateTime}`)
-            const metadata = {
-                contentType: req.file.mimetype 
-            }
-            const uploadFile = await uploadBytesResumable(storageRef, req.file.buffer, metadata)
-            profile_photo = await getDownloadURL(uploadFile.ref)
-          
-            res.status(200).json({
-                profile_photo
-            })
-
             const user = new UserModel({
                 profile_photo: profile_photo,
                 first_name: first_name,
@@ -75,7 +61,7 @@ async function signOn(req, res) {
         } else {
             res.status(400).json("User exists!")   
         }
-    } catch {
+    } catch (error) {
         console.log(error)  
         res.status(400).json({ error: 'Error' })
     }
@@ -111,7 +97,7 @@ async function getUser(req, res) {
     }
 }
 
-async function uploadFile(req, res) {
+async function uploadProfilePhoto(req, res) {
     try {
         const dateTime = giveCurrectDateTime()
 
@@ -151,5 +137,5 @@ module.exports = {
     signOn,
     changeStatusLog,
     getUser,
-    uploadFile
+    uploadProfilePhoto
 }
