@@ -102,7 +102,7 @@ async function changeStatusLog(req, res) {
 }
 
 async function addEvent(req, res) {
-    const { picture, title, date, place, city, cost, host } = req.body
+    const { picture, title, description, date, place, city, cost, host } = req.body
     
     try {
         const userFound = await UserModel.findOne({ _id: host }) 
@@ -111,6 +111,7 @@ async function addEvent(req, res) {
             const event = new EventModel({
                 picture: picture,
                 title: title,
+                description: description,
                 date: date,
                 place: place,
                 city: city,
