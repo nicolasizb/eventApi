@@ -6,7 +6,7 @@ const UserModel = require('../models/User.model.js')
 const EventModel = require('../models/Event.model.js')
 
 const { response } = require('express')
-const { default: mongoose } = require('mongoose')
+const { default: mongoose, Model } = require('mongoose')
 
 // Connection with firebase
 const firebaseCon = initializeApp(firebaseConfig)
@@ -146,6 +146,22 @@ async function getEvents(req, res) {
     }
 }
 
+async function getEvent(req, res) {
+    const { id } = req.params
+
+    try {
+        const event = await EventModel.findOne({ _id: id }) 
+
+        if(event) {
+            res.status(200).json(event)
+        } else {
+            res.status(404).json(event)
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function uploadProfilePhoto(req, res) {
     try {
         const dateTime = giveCurrectDateTime()
@@ -203,6 +219,7 @@ module.exports = {
     getUser,
     addEvent,
     getEvents,
+    getEvent,
     uploadProfilePhoto,
     uploadPictureEvent
 }
