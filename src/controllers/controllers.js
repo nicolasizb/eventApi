@@ -180,6 +180,7 @@ async function getTickets(req, res) {
                             dni: userFound.dni
                         },
                         event: {
+                            picture: eventFound.picture,
                             title: eventFound.title,
                             date: eventFound.date,
                             place: eventFound.place,
