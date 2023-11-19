@@ -163,6 +163,20 @@ async function getEvent(req, res) {
     }
 }
 
+async function getTickets(req, res) {
+    try {
+        const tickets = await TicketModel.find({})
+        
+        if(tickets) {
+            res.status(200).json(tickets)
+        } else {
+            res.status(404).json(tickets)        
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function createTicket(req, res) {
     const { userID, eventID } = req.body
 
@@ -258,6 +272,7 @@ module.exports = {
     addEvent,
     getEvents,
     getEvent,
+    getTickets,
     createTicket,
     uploadProfilePhoto,
     uploadPictureEvent
