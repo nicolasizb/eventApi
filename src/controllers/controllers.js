@@ -179,11 +179,13 @@ async function getTickets(req, res) {
                           ticketID: ticketFound._id,  
                         },
                         user: {
+                            id: userFound._id,
                             first_name: userFound.first_name,   
                             last_name: userFound.last_name,
                             dni: userFound.dni
                         },
                         event: {
+                            id: eventFound._id,
                             picture: eventFound.picture,
                             title: eventFound.title,
                             date: eventFound.date,
