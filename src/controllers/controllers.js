@@ -167,13 +167,44 @@ async function getTickets(req, res) {
     try {
         const tickets = await TicketModel.find({})
         
-        if(tickets) {
-            res.status(200).json(tickets)
+        if(tickets.length > 0) {
+            const ticketPromises = tickets.map( async (ticket) => {
+                const userFound = await UserModel.findOne({ _id : ticket.userID })
+                const eventFound = await EventModel.findOne({ _id: ticket.eventID })
+
+                if(userFound && eventFound) {
+                    return {
+                        user: {
+                            first_name: userFound.first_name,
+                            last_name: userFound.last_name,
+                            dni: userFound.dni
+                        },
+                        event: {
+                            title: eventFound.title,
+                            date: eventFound.date,
+                            place: eventFound.place,
+                            city: eventFound.city,
+                            cost: eventFound.cost
+                        }
+                    }
+                } else {
+                    res.status(404).json("Data ID not found")
+                }
+            })
+            
+            const ticketResults = await Promise.all(ticketPromises)
+
+            if (ticketResults.some(result => result === null)) {
+                res.status(404).json("Data ID not found");
+            } else {
+                res.status(200).json(ticketResults);
+            }
         } else {
-            res.status(404).json(tickets)        
+            res.status(404).json("Error data")        
         }
     } catch (error) {
         console.error(error)
+        res.status(500).json("Error interno del servidor"); 
     }
 }
 
@@ -192,22 +223,9 @@ async function createTicket(req, res) {
 
             const newTicket = ticket.save()
 
-            res.status(200).json({
-                user: {
-                    first_name: userFound.first_name,
-                    last_name: userFound.last_name,
-                    dni: userFound.dni
-                },
-                event: {
-                    title: eventFound.title,
-                    date: eventFound.date,
-                    place: eventFound.place,
-                    city: eventFound.city,
-                    cost: eventFound.cost
-                },
-            })
+            res.status(200).json("Ticket created")
         } else {
-            res.status(404).json("User or event not found")
+            res.status(404).json("Ticket or event not found")
         }
     } catch (error) {
         console.error(error)
