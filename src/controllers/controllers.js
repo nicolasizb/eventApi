@@ -169,13 +169,17 @@ async function getTickets(req, res) {
         
         if(tickets.length > 0) {
             const ticketPromises = tickets.map( async (ticket) => {
+                const ticketFound = await TicketModel.findOne({ _id: ticket._id })
                 const userFound = await UserModel.findOne({ _id : ticket.userID })
                 const eventFound = await EventModel.findOne({ _id: ticket.eventID })
 
-                if(userFound && eventFound) {
+                if(ticketFound && userFound && eventFound) {
                     return {
+                        id: {
+                          ticketID: ticketFound._id,  
+                        },
                         user: {
-                            first_name: userFound.first_name,
+                            first_name: userFound.first_name,   
                             last_name: userFound.last_name,
                             dni: userFound.dni
                         },
