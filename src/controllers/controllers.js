@@ -4,6 +4,7 @@ const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('fireb
 
 const UserModel = require('../models/User.model.js')
 const EventModel = require('../models/Event.model.js')
+const TicketModel = require('../models/Ticket.model.js')
 
 const { response } = require('express')
 const { default: mongoose, Model } = require('mongoose')
@@ -162,6 +163,43 @@ async function getEvent(req, res) {
     }
 }
 
+async function createTicket(req, res) {
+    const { userID, eventID } = req.body
+
+    try {
+        const userFound = await UserModel.findOne({ _id: userID })
+        const eventFound = await EventModel.findOne({ _id: eventID })
+
+        if(userFound && eventFound) {
+            const ticket = new TicketModel({
+                userID: userID, 
+                eventID: eventID
+            }) 
+
+            const newTicket = ticket.save()
+
+            res.status(200).json({
+                user: {
+                    first_name: userFound.first_name,
+                    last_name: userFound.last_name,
+                    dni: userFound.dni
+                },
+                event: {
+                    title: eventFound.title,
+                    date: eventFound.date,
+                    place: eventFound.place,
+                    city: eventFound.city,
+                    cost: eventFound.cost
+                },
+            })
+        } else {
+            res.status(404).json("User or event not found")
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 async function uploadProfilePhoto(req, res) {
     try {
         const dateTime = giveCurrectDateTime()
@@ -220,6 +258,7 @@ module.exports = {
     addEvent,
     getEvents,
     getEvent,
+    createTicket,
     uploadProfilePhoto,
     uploadPictureEvent
 }

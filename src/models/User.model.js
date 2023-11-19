@@ -31,7 +31,10 @@ const UserSchema = new mongoose.Schema({
     login_status: {
         type: Boolean,
         required: true,
-    }
+    },
+    counterEventsSubscribed: [{
+        type: mongoose.Schema.Types.ObjectId
+    }]
 })
 
 UserSchema.statics.encryptPassword = async (password) => {

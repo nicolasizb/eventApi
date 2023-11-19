@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const multer = require('multer')
-const { logIn, signOn, changeStatusLog, getUser, uploadProfilePhoto, uploadPictureEvent, addEvent, getEvents, getEvent } = require('../controllers/controllers.js')
+const { logIn, signOn, changeStatusLog, getUser, uploadProfilePhoto, uploadPictureEvent, addEvent, getEvents, getEvent, createTicket } = require('../controllers/controllers.js')
 
 const upload = multer({ storage: multer.memoryStorage() })
 
@@ -19,6 +19,8 @@ router.post('/log', changeStatusLog)
 router.get('/events', getEvents)
 router.get('/event/:id', getEvent)
 router.post('/create-event', addEvent)
+
+router.post('/create-ticket', createTicket)
 
 router.post('/upload-profile-photo', upload.single('filename') , uploadProfilePhoto)
 router.post('/upload-picture-event', upload.single('filename') , uploadPictureEvent)
